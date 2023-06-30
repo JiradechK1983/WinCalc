@@ -7,17 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace WinCalc
 {
     public partial class frmWinCalc : Form
     {
         private string number1 = "", number2 = "", answer = "";
+        private bool dotStatus = false;
+        private char symbol = '0';
 
         private void AddToDisplay(string numberSymbol)
         {
             if (this.txtDisplay.Text == "0" && numberSymbol == ".") // 0.
             {
+                this.dotStatus = true;  
                 this.txtDisplay.Text += numberSymbol;
             }
             else if(this.txtDisplay.Text == "0")    // 0 = 0
@@ -27,7 +31,35 @@ namespace WinCalc
             else if (this.txtDisplay.Text != "0")   // 1234
             {
                 this.txtDisplay.Text += numberSymbol;
+            } 
+            else if (this.txtDisplay.Text != "0" && numberSymbol == ".") // BUG
+            {
+                this.dotStatus = true;
+                this.txtDisplay.Text += numberSymbol;
             }
+        }
+
+        private string calculating(string num1, string num2, char _symbol)
+        {
+            double numFirst = double.Parse(num1);
+            double numSecond = double.Parse(num2);
+            double numAnswer = 0.0f;
+
+            switch(_symbol)
+            {
+                case '+': numAnswer = numFirst + numSecond; break;
+                case '-': numAnswer = numFirst - numSecond; break;
+                case '*': numAnswer = numFirst * numSecond; break;
+                case '/': numAnswer = numFirst / numSecond; break;
+            }
+            return numAnswer.ToString();
+        }
+
+        private void setNumber1(char _symbol)
+        {
+            this.symbol = _symbol;
+            this.number1 = this.txtDisplay.Text;
+            this.txtDisplay.Text = "0";
         }
 
         public frmWinCalc()
@@ -42,33 +74,36 @@ namespace WinCalc
 
         private void btnEqual_Click(object sender, EventArgs e)
         {
-
+            this.number2 = this.txtDisplay.Text;
+            this.txtDisplay.Text = 
+                this.calculating(this.number1, number2, this.symbol);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-
+            this.setNumber1('+');
         }
 
         private void btnMinus_Click(object sender, EventArgs e)
         {
-
+            this.setNumber1('-');
         }
 
         private void btnMultiply_Click(object sender, EventArgs e)
         {
-
+            this.setNumber1('*');
         }
 
         private void btnDivide_Click(object sender, EventArgs e)
         {
-
+            this.setNumber1('/');
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
             this.number1 = this.number2 = this.answer = "0";
             this.txtDisplay.Text = "0";
+            this.symbol = '0';
         }
 
         private void btnBack_Click(object sender, EventArgs e)
