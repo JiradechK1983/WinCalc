@@ -16,21 +16,18 @@ namespace WinCalc
 
         private void AddToDisplay(string numberSymbol)
         {
-            if(this.txtDisplay.Text == "0")
-            {
-                this.txtDisplay.Text = numberSymbol;
-            } 
-            else 
+            if (this.txtDisplay.Text == "0" && numberSymbol == ".") // 0.
             {
                 this.txtDisplay.Text += numberSymbol;
             }
-
-            //if (numberSymbol == ".")
-            //{
-            //    this.txtDisplay.Text += numberSymbol;
-            //}
-
-
+            else if(this.txtDisplay.Text == "0")    // 0 = 0
+            {
+                this.txtDisplay.Text = numberSymbol;
+            }
+            else if (this.txtDisplay.Text != "0")   // 1234
+            {
+                this.txtDisplay.Text += numberSymbol;
+            }
         }
 
         public frmWinCalc()
@@ -76,7 +73,12 @@ namespace WinCalc
 
         private void btnBack_Click(object sender, EventArgs e)
         {
+            if(this.txtDisplay.Text.Length > 0)
+                this.txtDisplay.Text = 
+                        this.txtDisplay.Text.Remove(this.txtDisplay.Text.Length - 1);
 
+            if ((this.txtDisplay.Text.Length == 0) || (this.txtDisplay.Text == ""))
+                this.txtDisplay.Text += "0";
         }
 
         private void btnZero_Click(object sender, EventArgs e)
