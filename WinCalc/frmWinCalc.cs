@@ -19,9 +19,16 @@ namespace WinCalc
 
         private void AddToDisplay(string numberSymbol)
         {
+            if (numberSymbol == ".")
+                this.dotStatus = true;
+
+            // BUG
+            //if (this.txtDisplay.Text.Length >= 15) 
+            //    this.txtDisplay.Text = this.txtDisplay.Text;
+
+
             if (this.txtDisplay.Text == "0" && numberSymbol == ".") // 0.
             {
-                this.dotStatus = true;  
                 this.txtDisplay.Text += numberSymbol;
             }
             else if(this.txtDisplay.Text == "0")    // 0 = 0
@@ -32,11 +39,6 @@ namespace WinCalc
             {
                 this.txtDisplay.Text += numberSymbol;
             } 
-            else if (this.txtDisplay.Text != "0" && numberSymbol == ".") // BUG
-            {
-                this.dotStatus = true;
-                this.txtDisplay.Text += numberSymbol;
-            }
         }
 
         private string calculating(string num1, string num2, char _symbol)
@@ -60,6 +62,7 @@ namespace WinCalc
             this.symbol = _symbol;
             this.number1 = this.txtDisplay.Text;
             this.txtDisplay.Text = "0";
+            this.dotStatus = false;
         }
 
         public frmWinCalc()
@@ -69,7 +72,8 @@ namespace WinCalc
 
         private void btnDot_Click(object sender, EventArgs e)
         {
-            this.AddToDisplay(".");
+            if (!this.dotStatus)
+                this.AddToDisplay(".");
         }
 
         private void btnEqual_Click(object sender, EventArgs e)
@@ -104,6 +108,7 @@ namespace WinCalc
             this.number1 = this.number2 = this.answer = "0";
             this.txtDisplay.Text = "0";
             this.symbol = '0';
+            this.dotStatus = false;
         }
 
         private void btnBack_Click(object sender, EventArgs e)
